@@ -1,0 +1,708 @@
+23mca11@rgit:~$ mysql -u 23mca11 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 42
+Server version: 8.0.34-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select * from employee;
+ERROR 1046 (3D000): No database selected
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 23mca11            |
+| information_schema |
+| performance_schema |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from employee;
++------+--------+------+-------------+-------+--------+
+| Id   | Deptid | Name | Designation | Basic | Gender |
++------+--------+------+-------------+-------+--------+
+| 101  |      1 | Ram  | Typist      |  2000 | M      |
+| 102  |      2 | Arun | Analyst     |  6000 | M      |
+| 121  |      1 | Ruby | Typist      |  2000 | F      |
+| 156  |      3 | Mary | Manager     |  4500 | F      |
++------+--------+------+-------------+-------+--------+
+4 rows in set (0.01 sec)
+
+mysql> insert into employee values("123",2,"Mridula","Analyst",6000,"F");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values("114",4,"Menon","Clerk",1500,"M");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into employee values("115",4,"Tim","Clerk",1500,"M");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employee values("127",2,"Kiran","Manager",4000,"M");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++------+--------+---------+-------------+-------+--------+
+| Id   | Deptid | Name    | Designation | Basic | Gender |
++------+--------+---------+-------------+-------+--------+
+| 101  |      1 | Ram     | Typist      |  2000 | M      |
+| 102  |      2 | Arun    | Analyst     |  6000 | M      |
+| 121  |      1 | Ruby    | Typist      |  2000 | F      |
+| 156  |      3 | Mary    | Manager     |  4500 | F      |
+| 123  |      2 | Mridula | Analyst     |  6000 | F      |
+| 114  |      4 | Menon   | Clerk       |  1500 | M      |
+| 115  |      4 | Tim     | Clerk       |  1500 | M      |
+| 127  |      2 | Kiran   | Manager     |  4000 | M      |
++------+--------+---------+-------------+-------+--------+
+8 rows in set (0.00 sec)
+
+mysql> describe employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| Id          | varchar(5)  | YES  |     | NULL    |       |
+| Deptid      | int         | YES  |     | NULL    |       |
+| Name        | varchar(15) | YES  |     | NULL    |       |
+| Designation | varchar(15) | YES  |     | NULL    |       |
+| Basic       | int         | YES  |     | NULL    |       |
+| Gender      | varchar(1)  | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select Id,Name,Designation,Basic From Employee;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select Id,Name,Designation,Basic From employee;
++------+---------+-------------+-------+
+| Id   | Name    | Designation | Basic |
++------+---------+-------------+-------+
+| 101  | Ram     | Typist      |  2000 |
+| 102  | Arun    | Analyst     |  6000 |
+| 121  | Ruby    | Typist      |  2000 |
+| 156  | Mary    | Manager     |  4500 |
+| 123  | Mridula | Analyst     |  6000 |
+| 114  | Menon   | Clerk       |  1500 |
+| 115  | Tim     | Clerk       |  1500 |
+| 127  | Kiran   | Manager     |  4000 |
++------+---------+-------------+-------+
+8 rows in set (0.01 sec)
+
+mysql> select Id,Name frm employee where Deptid=2
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee where Deptid=2' at line 1
+mysql> select Id,Name frm employee where Deptid="2";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee where Deptid="2"' at line 1
+mysql> select Id,Name from employee where Deptid="2";
++------+---------+
+| Id   | Name    |
++------+---------+
+| 102  | Arun    |
+| 123  | Mridula |
+| 127  | Kiran   |
++------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select Id,Name,Designation,Deptid,Basic(0.075*Basic)as Da,(0.005*Basic) as HRA,(Basic+0.075*Basic+0.005*Basic) as NET_SAL from employee;
+select Id,Name,Designation,Deptid,Basic(0.075*Basic)as Da,(0.005*Basic) as HRA,(Basic+0.075*Basic+0.005*Basic) as NET_SAL from employee;
+^C
+mysql> select Id,Name,Designation,Deptid,Basic(0.075*Basic)as Da,(0.005*Basic) as HRA,(Basic+0.075*Basic+0.005*Basic) as NET_SAL from employee;
+ERROR 1305 (42000): FUNCTION 23mca11.Basic does not exist
+mysql> select Id,Name,Designation,Deptid,(0.075*Basic)as Da,(0.005*Basic) as HRA,(Basic+0.075*Basic+0.005*Basic) as NET_SAL from employee;
++------+---------+-------------+--------+---------+--------+----------+
+| Id   | Name    | Designation | Deptid | Da      | HRA    | NET_SAL  |
++------+---------+-------------+--------+---------+--------+----------+
+| 101  | Ram     | Typist      |      1 | 150.000 | 10.000 | 2160.000 |
+| 102  | Arun    | Analyst     |      2 | 450.000 | 30.000 | 6480.000 |
+| 121  | Ruby    | Typist      |      1 | 150.000 | 10.000 | 2160.000 |
+| 156  | Mary    | Manager     |      3 | 337.500 | 22.500 | 4860.000 |
+| 123  | Mridula | Analyst     |      2 | 450.000 | 30.000 | 6480.000 |
+| 114  | Menon   | Clerk       |      4 | 112.500 |  7.500 | 1620.000 |
+| 115  | Tim     | Clerk       |      4 | 112.500 |  7.500 | 1620.000 |
+| 127  | Kiran   | Manager     |      2 | 300.000 | 20.000 | 4320.000 |
++------+---------+-------------+--------+---------+--------+----------+
+8 rows in set (0.00 sec)
+
+mysql> select Id,Name,Designation,Deptid,basic from employees order by Basic des;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'des' at line 1
+mysql> select Id,Name,Designation,Deptid,basic from employees order by Basic desc;
+ERROR 1146 (42S02): Table '23mca11.employees' doesn't exist
+mysql> select Id,Name,Designation,Deptid,basic from employee order by Basic desc;
++------+---------+-------------+--------+-------+
+| Id   | Name    | Designation | Deptid | basic |
++------+---------+-------------+--------+-------+
+| 102  | Arun    | Analyst     |      2 |  6000 |
+| 123  | Mridula | Analyst     |      2 |  6000 |
+| 156  | Mary    | Manager     |      3 |  4500 |
+| 127  | Kiran   | Manager     |      2 |  4000 |
+| 101  | Ram     | Typist      |      1 |  2000 |
+| 121  | Ruby    | Typist      |      1 |  2000 |
+| 114  | Menon   | Clerk       |      4 |  1500 |
+| 115  | Tim     | Clerk       |      4 |  1500 |
++------+---------+-------------+--------+-------+
+8 rows in set (0.00 sec)
+
+mysql> select * from employee where designation="Typist"
+    -> ;
++------+--------+------+-------------+-------+--------+
+| Id   | Deptid | Name | Designation | Basic | Gender |
++------+--------+------+-------------+-------+--------+
+| 101  |      1 | Ram  | Typist      |  2000 | M      |
+| 121  |      1 | Ruby | Typist      |  2000 | F      |
++------+--------+------+-------------+-------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee where Designation in("Analyst","Manager")
+    -> ;
++------+--------+---------+-------------+-------+--------+
+| Id   | Deptid | Name    | Designation | Basic | Gender |mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
++------+--------+---------+-------------+-------+--------+
+| 102  |      2 | Arun    | Analyst     |  6000 | M      |
+| 156  |      3 | Mary    | Manager     |  4500 | F      |
+| 123  |      2 | Mridula | Analyst     |  6000 | F      |
+| 127  |      2 | Kiran   | Manager     |  4000 | M      |
++------+--------+---------+-------------+-------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct designation from employee;
++-------------+
+| designation |
++-------------+
+| Typist      |
+| Analyst     |
+| Manager     |
+| Clerk       |
++-------------+
+4 rows in set (0.00 sec)
+
+mysql> select Id,Name,Deptid,Basic from employee where (Designation="Manager" or Designation="Clerk") and (Basic between 1400 and 4500);
++------+-------+--------+-------+
+| Id   | Name  | Deptid | Basic |
++------+-------+--------+-------+
+| 156  | Mary  |      3 |  4500 |
+| 114  | Menon |      4 |  1500 |
+| 115  | Tim   |      4 |  1500 |
+| 127  | Kiran |      2 |  4000 |
++------+-------+--------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select count(*) from employee where Gender="M";
++----------+
+| count(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select Designation,max(Basic) from employees group by designation;
+ERROR 1146 (42S02): Table '23mca11.employees' doesn't exist
+mysql> select Designation,max(Basic) from employee group by designation;
++-------------+------------+
+| Designation | max(Basic) |
++-------------+------------+
+| Typist      |       2000 |
+| Analyst     |       6000 |mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
+| Manager     |       4500 |
+| Clerk       |       1500 |
++-------------+------------+mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
+4 rows in set (0.00 sec)mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
+
+mysql> alter table employee add manager_id char(5);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+ERROR 1046 (3D000): No database selected
+mysql> use 23mca11
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> update employee set manager_id=NULL where Id in ("101","102");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id=NULL where Id in ("121","156");
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee set manager_id="102" where Id in ("123","114","115");
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select manager_id from employee where Name="Ram";
++------------+
+| manager_id |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Basic) from Employee group by Deptid;
+ERROR 1146 (42S02): Table '23mca11.Employee' doesn't exist
+mysql> select avg(Basic) from employee group by Deptid;
++------------+
+| avg(Basic) |
++------------+
+|  2000.0000 |
+|  5333.3333 |
+|  4500.0000 |
+|  1500.0000 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select max(Basic) from employee;
++------------+
+| max(Basic) |
++------------+
+|       6000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select Deptid,count(*) from employee groupby deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'deptid' at line 1
+mysql> select Deptid,count(*) from employee groupby Deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Deptid' at line 1
+mysql> select Deptid,count(*) from employee group by Deptid;
++--------+----------+
+| Deptid | count(*) |
++--------+----------+
+|      1 |        2 |
+|      2 |        3 |
+|      3 |        1 |
+|      4 |        2 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(distinct Deptid) from employee;
++------------------------+
+| count(distinct Deptid) |
++------------------------+
+|                      4 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct Deptid)as count from employee;
++-------+
+| count |
++-------+
+|     4 |
++-------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+
